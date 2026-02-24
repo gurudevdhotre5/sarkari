@@ -1,52 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Notification Panel</title>
+<title>CSC Website</title>
 <style>
 body {font-family: Arial; margin:0; background:#f2f2f2;}
-header {background:#007bff; color:white; padding:15px; text-align:center;}
+header {background:#007bff; color:white; padding:15px; text-align:center; position:relative;}
+.menu {position:absolute; right:20px; top:15px; cursor:pointer; font-size:22px;}
+.dropdown {display:none; position:absolute; right:20px; top:50px; background:white; padding:10px; box-shadow:0 0 5px gray;}
 .container {padding:20px;}
-input, button {padding:8px; margin:5px;}
-button {background:#007bff; color:white; border:none; cursor:pointer;}
-button:hover {background:#0056b3;}
 .notification {background:white; padding:10px; margin:10px 0; border-radius:5px;}
+button {padding:6px 10px; margin:5px; background:#007bff; color:white; border:none; cursor:pointer;}
+button:hover {background:#0056b3;}
 .hidden {display:none;}
+input {padding:6px; margin:5px;}
 </style>
 </head>
 <body>
 
 <header>
-<h2>CSC Admin Panel</h2>
+<h2>CSC & Online Services</h2>
+<div class="menu" onclick="toggleMenu()">⋮</div>
+
+<div class="dropdown" id="dropdownMenu">
+<button onclick="showLogin()">Admin Login</button>
+</div>
 </header>
 
-<div class="container" id="loginPage">
-<h3>Login</h3>
+<div class="container">
+<h3>Notifications</h3>
+<div id="notificationList"></div>
+</div>
+
+<!-- Login Modal -->
+<div class="container hidden" id="loginBox">
+<h3>Admin Login</h3>
 <input type="text" id="username" placeholder="Username"><br>
 <input type="password" id="password" placeholder="Password"><br>
 <button onclick="login()">Login</button>
+<button onclick="closeLogin()">Close</button>
 <p id="loginMsg" style="color:red;"></p>
 </div>
 
+<!-- Admin Panel -->
 <div class="container hidden" id="adminPanel">
 <h3>Add Notification</h3>
 <input type="text" id="newNotification" placeholder="Enter notification">
 <button onclick="addNotification()">Add</button>
 <button onclick="logout()">Logout</button>
-
-<h3>All Notifications</h3>
-<div id="notificationList"></div>
 </div>
 
 <script>
-let correctUser = "admin";
-let correctPass = "1234";
+let correctUser="admin";
+let correctPass="1234";
+
+function toggleMenu(){
+let menu=document.getElementById("dropdownMenu");
+menu.style.display=menu.style.display==="block"?"none":"block";
+}
+
+function showLogin(){
+document.getElementById("loginBox").classList.remove("hidden");
+}
+
+function closeLogin(){
+document.getElementById("loginBox").classList.add("hidden");
+}
 
 function login(){
-let user = document.getElementById("username").value;
-let pass = document.getElementById("password").value;
+let user=document.getElementById("username").value;
+let pass=document.getElementById("password").value;
 
-if(user === correctUser && pass === correctPass){
-document.getElementById("loginPage").classList.add("hidden");
+if(user===correctUser && pass===correctPass){
+document.getElementById("loginBox").classList.add("hidden");
 document.getElementById("adminPanel").classList.remove("hidden");
 loadNotifications();
 }else{
@@ -55,26 +80,26 @@ document.getElementById("loginMsg").innerText="Wrong Username or Password";
 }
 
 function logout(){
-location.reload();
+document.getElementById("adminPanel").classList.add("hidden");
 }
 
 function addNotification(){
-let text = document.getElementById("newNotification").value;
-if(text === "") return;
+let text=document.getElementById("newNotification").value;
+if(text==="") return;
 
-let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+let notifications=JSON.parse(localStorage.getItem("notifications"))||[];
 notifications.push(text);
-localStorage.setItem("notifications", JSON.stringify(notifications));
+localStorage.setItem("notifications",JSON.stringify(notifications));
 document.getElementById("newNotification").value="";
 loadNotifications();
 }
 
 function loadNotifications(){
-let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-let list = document.getElementById("notificationList");
+let notifications=JSON.parse(localStorage.getItem("notifications"))||[];
+let list=document.getElementById("notificationList");
 list.innerHTML="";
-notifications.forEach((item, index)=>{
-list.innerHTML += `<div class="notification">
+notifications.forEach((item,index)=>{
+list.innerHTML+=`<div class="notification">
 ${item}
 <button onclick="deleteNotification(${index})">Delete</button>
 </div>`;
@@ -82,11 +107,13 @@ ${item}
 }
 
 function deleteNotification(index){
-let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+let notifications=JSON.parse(localStorage.getItem("notifications"))||[];
 notifications.splice(index,1);
-localStorage.setItem("notifications", JSON.stringify(notifications));
+localStorage.setItem("notifications",JSON.stringify(notifications));
 loadNotifications();
 }
+
+loadNotifications();
 </script>
 
 </body>
