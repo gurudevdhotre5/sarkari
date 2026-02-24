@@ -1,62 +1,179 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>CSC Website</title>
+<title>SARKARI KAM</title>
 <style>
-body {font-family: Arial; margin:0; background:#f2f2f2;}
-header {background:#007bff; color:white; padding:15px; text-align:center; position:relative;}
-.menu {position:absolute; right:20px; top:15px; cursor:pointer; font-size:22px;}
-.dropdown {display:none; position:absolute; right:20px; top:50px; background:white; padding:10px; box-shadow:0 0 5px gray;}
-.container {padding:20px;}
-.notification {background:white; padding:10px; margin:10px 0; border-radius:5px;}
-button {padding:6px 10px; margin:5px; background:#007bff; color:white; border:none; cursor:pointer;}
-button:hover {background:#0056b3;}
-.hidden {display:none;}
-input {padding:6px; margin:5px;}
+body{margin:0;font-family:Arial;background:#f1f1f1;}
+
+header{
+background:#1e4f8a;
+color:white;
+text-align:center;
+padding:25px;
+position:relative;
+}
+
+header h1{margin:0;font-size:40px;}
+header p{margin:5px 0;}
+
+.menu-dot{
+position:absolute;
+right:20px;
+top:20px;
+font-size:25px;
+cursor:pointer;
+}
+
+.nav{
+background:black;
+text-align:center;
+padding:10px;
+}
+
+.nav a{
+color:white;
+text-decoration:none;
+padding:10px 20px;
+display:inline-block;
+}
+
+.nav a:hover{
+background:#0044cc;
+}
+
+.button-section{
+text-align:center;
+padding:20px;
+}
+
+.button-section button{
+background:#1e4f8a;
+color:white;
+border:none;
+padding:12px 18px;
+margin:8px;
+cursor:pointer;
+border-radius:5px;
+}
+
+.container{
+display:flex;
+justify-content:center;
+gap:20px;
+padding:20px;
+}
+
+.box{
+background:white;
+width:300px;
+border:2px solid red;
+}
+
+.box h3{
+background:red;
+color:white;
+margin:0;
+padding:10px;
+text-align:center;
+}
+
+.box ul{
+list-style:none;
+padding:10px;
+}
+
+.box ul li{
+padding:8px;
+border-bottom:1px solid #ccc;
+}
+
+.hidden{display:none;}
+
+input,button{
+padding:8px;
+margin:5px;
+}
+
+.admin-box{
+background:white;
+padding:15px;
+position:fixed;
+top:30%;
+left:40%;
+box-shadow:0 0 10px gray;
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<h2>CSC & Online Services</h2>
-<div class="menu" onclick="toggleMenu()">⋮</div>
-
-<div class="dropdown" id="dropdownMenu">
-<button onclick="showLogin()">Admin Login</button>
-</div>
+<h1>SARKARI KAM</h1>
+<p>WWW.SARKARIKAM.ORG</p>
+<div class="menu-dot" onclick="showLogin()">⋮</div>
 </header>
 
-<div class="container">
-<h3>Notifications</h3>
-<div id="notificationList"></div>
+<div class="nav">
+<a href="#">Home</a>
+<a href="#">Jobs</a>
+<a href="#">Admit Card</a>
+<a href="#">Result</a>
+<a href="#">Admission</a>
 </div>
 
-<!-- Login Modal -->
-<div class="container hidden" id="loginBox">
+<div class="button-section">
+<button>UP Scholarship 2025</button>
+<button>Railway RRB 2025</button>
+<button>BSF Online Form</button>
+<button>UP Board Result</button>
+</div>
+
+<div class="container">
+<div class="box">
+<h3>सरकारी काम</h3>
+<ul id="notificationList"></ul>
+</div>
+
+<div class="box">
+<h3>मोबाइल से संबंधित</h3>
+<ul>
+<li>Mobile SIM Check</li>
+<li>Block Lost Phone</li>
+<li>Unblock SIM</li>
+</ul>
+</div>
+
+<div class="box">
+<h3>चुनाव</h3>
+<ul>
+<li>Voter List Check</li>
+<li>Panchayat Result</li>
+<li>Election Details</li>
+</ul>
+</div>
+</div>
+
+<!-- Login Box -->
+<div id="loginBox" class="admin-box hidden">
 <h3>Admin Login</h3>
 <input type="text" id="username" placeholder="Username"><br>
 <input type="password" id="password" placeholder="Password"><br>
 <button onclick="login()">Login</button>
 <button onclick="closeLogin()">Close</button>
-<p id="loginMsg" style="color:red;"></p>
+<p id="msg" style="color:red;"></p>
 </div>
 
 <!-- Admin Panel -->
-<div class="container hidden" id="adminPanel">
+<div id="adminPanel" class="admin-box hidden">
 <h3>Add Notification</h3>
-<input type="text" id="newNotification" placeholder="Enter notification">
+<input type="text" id="newNotification" placeholder="Enter text"><br>
 <button onclick="addNotification()">Add</button>
 <button onclick="logout()">Logout</button>
 </div>
 
 <script>
-let correctUser="admin";
-let correctPass="1234";
-
-function toggleMenu(){
-let menu=document.getElementById("dropdownMenu");
-menu.style.display=menu.style.display==="block"?"none":"block";
-}
+let user="admin";
+let pass="1234";
 
 function showLogin(){
 document.getElementById("loginBox").classList.remove("hidden");
@@ -67,15 +184,15 @@ document.getElementById("loginBox").classList.add("hidden");
 }
 
 function login(){
-let user=document.getElementById("username").value;
-let pass=document.getElementById("password").value;
+let u=document.getElementById("username").value;
+let p=document.getElementById("password").value;
 
-if(user===correctUser && pass===correctPass){
+if(u===user && p===pass){
 document.getElementById("loginBox").classList.add("hidden");
 document.getElementById("adminPanel").classList.remove("hidden");
 loadNotifications();
 }else{
-document.getElementById("loginMsg").innerText="Wrong Username or Password";
+document.getElementById("msg").innerText="Wrong Login!";
 }
 }
 
@@ -87,30 +204,20 @@ function addNotification(){
 let text=document.getElementById("newNotification").value;
 if(text==="") return;
 
-let notifications=JSON.parse(localStorage.getItem("notifications"))||[];
-notifications.push(text);
-localStorage.setItem("notifications",JSON.stringify(notifications));
+let data=JSON.parse(localStorage.getItem("data"))||[];
+data.push(text);
+localStorage.setItem("data",JSON.stringify(data));
 document.getElementById("newNotification").value="";
 loadNotifications();
 }
 
 function loadNotifications(){
-let notifications=JSON.parse(localStorage.getItem("notifications"))||[];
+let data=JSON.parse(localStorage.getItem("data"))||[];
 let list=document.getElementById("notificationList");
 list.innerHTML="";
-notifications.forEach((item,index)=>{
-list.innerHTML+=`<div class="notification">
-${item}
-<button onclick="deleteNotification(${index})">Delete</button>
-</div>`;
+data.forEach((item)=>{
+list.innerHTML+=`<li>${item}</li>`;
 });
-}
-
-function deleteNotification(index){
-let notifications=JSON.parse(localStorage.getItem("notifications"))||[];
-notifications.splice(index,1);
-localStorage.setItem("notifications",JSON.stringify(notifications));
-loadNotifications();
 }
 
 loadNotifications();
