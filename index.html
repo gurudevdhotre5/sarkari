@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>SARKARI KAM</title>
+<title>सरकारी लिंक</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body{margin:0;font-family:Arial;background:#f1f1f1;}
+body{margin:0;font-family:Arial;background:#f2f2f2;}
 
 header{
-background:#1e4f8a;
+background:#0d3b66;
 color:white;
 text-align:center;
 padding:25px;
 position:relative;
 }
 
-header h1{margin:0;font-size:40px;}
-header p{margin:5px 0;}
+header h1{
+margin:0;
+font-size:36px;
+}
 
 .menu-dot{
 position:absolute;
 right:20px;
 top:20px;
-font-size:25px;
+font-size:24px;
 cursor:pointer;
 }
 
@@ -32,8 +35,8 @@ padding:10px;
 
 .nav a{
 color:white;
+padding:10px 15px;
 text-decoration:none;
-padding:10px 20px;
 display:inline-block;
 }
 
@@ -41,23 +44,9 @@ display:inline-block;
 background:#0044cc;
 }
 
-.button-section{
-text-align:center;
-padding:20px;
-}
-
-.button-section button{
-background:#1e4f8a;
-color:white;
-border:none;
-padding:12px 18px;
-margin:8px;
-cursor:pointer;
-border-radius:5px;
-}
-
 .container{
 display:flex;
+flex-wrap:wrap;
 justify-content:center;
 gap:20px;
 padding:20px;
@@ -65,42 +54,77 @@ padding:20px;
 
 .box{
 background:white;
-width:300px;
-border:2px solid red;
+width:320px;
+border-radius:8px;
+box-shadow:0 0 10px #ccc;
+overflow:hidden;
 }
 
 .box h3{
-background:red;
-color:white;
 margin:0;
 padding:10px;
+background:#c40000;
+color:white;
 text-align:center;
 }
 
 .box ul{
 list-style:none;
 padding:10px;
+margin:0;
 }
 
 .box ul li{
 padding:8px;
-border-bottom:1px solid #ccc;
+border-bottom:1px solid #ddd;
+}
+
+.box ul li a{
+text-decoration:none;
+color:#0d3b66;
+font-weight:bold;
 }
 
 .hidden{display:none;}
 
-input,button{
-padding:8px;
-margin:5px;
+.admin-panel{
+position:fixed;
+top:5%;
+left:50%;
+transform:translateX(-50%);
+background:white;
+width:400px;
+padding:20px;
+box-shadow:0 0 15px gray;
+border-radius:8px;
+z-index:1000;
 }
 
-.admin-box{
-background:white;
-padding:15px;
-position:fixed;
-top:30%;
-left:40%;
-box-shadow:0 0 10px gray;
+.admin-panel input, select{
+width:100%;
+padding:8px;
+margin:8px 0;
+}
+
+.admin-panel button{
+padding:8px 12px;
+margin:5px 0;
+background:#0d3b66;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.admin-panel button:hover{
+background:#002855;
+}
+
+.admin-list{
+max-height:200px;
+overflow:auto;
+margin-top:10px;
+border-top:1px solid #ccc;
+padding-top:10px;
 }
 </style>
 </head>
@@ -108,67 +132,64 @@ box-shadow:0 0 10px gray;
 <body>
 
 <header>
-<h1>SARKARI KAM</h1>
-<p>WWW.SARKARIKAM.ORG</p>
+<h1>सरकारी लिंक</h1>
 <div class="menu-dot" onclick="showLogin()">⋮</div>
 </header>
 
 <div class="nav">
-<a href="#">Home</a>
-<a href="#">Jobs</a>
-<a href="#">Admit Card</a>
-<a href="#">Result</a>
-<a href="#">Admission</a>
-</div>
-
-<div class="button-section">
-<button>UP Scholarship 2025</button>
-<button>Railway RRB 2025</button>
-<button>BSF Online Form</button>
-<button>UP Board Result</button>
+<a href="#">होम</a>
+<a href="#">नौकरी</a>
+<a href="#">एडमिट कार्ड</a>
+<a href="#">रिजल्ट</a>
+<a href="#">एडमिशन</a>
 </div>
 
 <div class="container">
+
 <div class="box">
 <h3>सरकारी काम</h3>
-<ul id="notificationList"></ul>
+<ul id="govt"></ul>
 </div>
 
 <div class="box">
 <h3>मोबाइल से संबंधित</h3>
-<ul>
-<li>Mobile SIM Check</li>
-<li>Block Lost Phone</li>
-<li>Unblock SIM</li>
-</ul>
+<ul id="mobile"></ul>
 </div>
 
 <div class="box">
 <h3>चुनाव</h3>
-<ul>
-<li>Voter List Check</li>
-<li>Panchayat Result</li>
-<li>Election Details</li>
-</ul>
-</div>
+<ul id="election"></ul>
 </div>
 
-<!-- Login Box -->
-<div id="loginBox" class="admin-box hidden">
+</div>
+
+<!-- Login -->
+<div id="loginBox" class="admin-panel hidden">
 <h3>Admin Login</h3>
-<input type="text" id="username" placeholder="Username"><br>
-<input type="password" id="password" placeholder="Password"><br>
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
 <button onclick="login()">Login</button>
-<button onclick="closeLogin()">Close</button>
 <p id="msg" style="color:red;"></p>
 </div>
 
-<!-- Admin Panel -->
-<div id="adminPanel" class="admin-box hidden">
-<h3>Add Notification</h3>
-<input type="text" id="newNotification" placeholder="Enter text"><br>
-<button onclick="addNotification()">Add</button>
+<!-- Admin Dashboard -->
+<div id="adminPanel" class="admin-panel hidden">
+<h3>Admin Dashboard</h3>
+
+<select id="category">
+<option value="govt">सरकारी काम</option>
+<option value="mobile">मोबाइल</option>
+<option value="election">चुनाव</option>
+</select>
+
+<input type="text" id="title" placeholder="Title">
+<input type="text" id="url" placeholder="URL (https://...)">
+
+<button onclick="addData()">Add</button>
 <button onclick="logout()">Logout</button>
+
+<div class="admin-list" id="adminList"></div>
+
 </div>
 
 <script>
@@ -179,10 +200,6 @@ function showLogin(){
 document.getElementById("loginBox").classList.remove("hidden");
 }
 
-function closeLogin(){
-document.getElementById("loginBox").classList.add("hidden");
-}
-
 function login(){
 let u=document.getElementById("username").value;
 let p=document.getElementById("password").value;
@@ -190,7 +207,7 @@ let p=document.getElementById("password").value;
 if(u===user && p===pass){
 document.getElementById("loginBox").classList.add("hidden");
 document.getElementById("adminPanel").classList.remove("hidden");
-loadNotifications();
+loadAll();
 }else{
 document.getElementById("msg").innerText="Wrong Login!";
 }
@@ -200,27 +217,48 @@ function logout(){
 document.getElementById("adminPanel").classList.add("hidden");
 }
 
-function addNotification(){
-let text=document.getElementById("newNotification").value;
-if(text==="") return;
+function addData(){
+let cat=document.getElementById("category").value;
+let title=document.getElementById("title").value;
+let url=document.getElementById("url").value;
+
+if(title==="" || url==="") return;
 
 let data=JSON.parse(localStorage.getItem("data"))||[];
-data.push(text);
+data.push({cat,title,url});
 localStorage.setItem("data",JSON.stringify(data));
-document.getElementById("newNotification").value="";
-loadNotifications();
+
+document.getElementById("title").value="";
+document.getElementById("url").value="";
+loadAll();
 }
 
-function loadNotifications(){
+function loadAll(){
 let data=JSON.parse(localStorage.getItem("data"))||[];
-let list=document.getElementById("notificationList");
-list.innerHTML="";
-data.forEach((item)=>{
-list.innerHTML+=`<li>${item}</li>`;
+
+document.getElementById("govt").innerHTML="";
+document.getElementById("mobile").innerHTML="";
+document.getElementById("election").innerHTML="";
+document.getElementById("adminList").innerHTML="";
+
+data.forEach((item,index)=>{
+document.getElementById(item.cat).innerHTML+=
+`<li><a href="${item.url}" target="_blank">${item.title}</a></li>`;
+
+document.getElementById("adminList").innerHTML+=
+`${item.title} 
+<button onclick="deleteData(${index})">Delete</button><br>`;
 });
 }
 
-loadNotifications();
+function deleteData(index){
+let data=JSON.parse(localStorage.getItem("data"))||[];
+data.splice(index,1);
+localStorage.setItem("data",JSON.stringify(data));
+loadAll();
+}
+
+loadAll();
 </script>
 
 </body>
